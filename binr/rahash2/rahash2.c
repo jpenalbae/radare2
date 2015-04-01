@@ -65,7 +65,7 @@ static void do_hash_print(RHash *ctx, int hash, int dlen, int rad, int ule) {
 	case 0:
 		if (!quiet)
 			printf ("0x%08"PFMT64x"-0x%08"PFMT64x" %s: ",
-				from, to, hname);
+				from, to-1, hname);
 		do_hash_hexprint (c, dlen, ule, rad);
 		break;
 	case 1:
@@ -98,7 +98,7 @@ static int do_hash_internal(RHash *ctx, int hash, const ut8 *buf, int len, int r
 			eprintf ("entropy: %10f\n", e);
 		} else {
 			printf ("0x%08"PFMT64x"-0x%08"PFMT64x" %10f: ",
-					from, to, e);
+					from, to-1, e);
 			r_print_progressbar (NULL, 12.5 * e, 60);
 			printf ("\n");
 		}
@@ -199,6 +199,8 @@ static int do_hash(const char *file, const char *algo, RIO *io, int bsize, int r
 					r_io_pread (io, j, buf, bsize);
 					from = j;
 					to = j+bsize;
+					if (to>fsize)
+						to = fsize;
 					do_hash_internal (ctx, hashbit, buf, nsize, rad, 1, ule);
 				}
 				from = ofrom;
