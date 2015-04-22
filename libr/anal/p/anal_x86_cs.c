@@ -515,7 +515,7 @@ static int analop(RAnal *a, RAnalOp *op, ut64 addr, const ut8 *buf, int len) {
 				if (a->decode) {
 					char *src = getarg (handle, insn, 1, 0, NULL);
 					char *dst = getarg (handle, insn, 0, 0, NULL);
-					esilprintf (op,  "%s,%s,==,%%z,zf,=,%%b%d,cf,=,%%p,pf,=,%%s,sf,=",
+					esilprintf (op, "%s,%s,==,%%z,zf,=,%%b%d,cf,=,%%p,pf,=,%%s,sf,=,%%o,of,=",
 						src, dst, (INSOP(0).size*8));
 					free (src);
 					free (dst);
@@ -777,12 +777,11 @@ static int analop(RAnal *a, RAnalOp *op, ut64 addr, const ut8 *buf, int len) {
 			if (a->decode) {
 				char* arg = getarg (handle, insn, 0, 0, NULL);
 				esilprintf (op,
-						"%d,%s,+,"
+						"%s,"
 						"%d,%s,-=,%s,"
 						"=[],"
 						"%s,%s,=",
-						op->size, pc,
-						rs, sp, sp, arg, pc);
+						pc, rs, sp, sp, arg, pc);
 				free (arg);
 			}
 			break;
